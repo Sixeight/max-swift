@@ -13,11 +13,15 @@ import Alamofire
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
     
+    let cellIdentifier = "myCell"
+    
     let maxURL = "https://gist.githubusercontent.com/hitode909/4cd0be11c89743710599/raw/ce4623c73101942e53f9da11ce601ba57f145136/max.txt"
     var maxs: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: self.cellIdentifier)
         
         Alamofire.request(.GET, self.maxURL)
             .responseString { _, _, body, _ in
@@ -59,7 +63,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         var max = self.maxs[indexPath.row]
         
-        var cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "cell")
+        var cell = self.tableView.dequeueReusableCellWithIdentifier(self.cellIdentifier, forIndexPath: indexPath) as UITableViewCell
         cell.textLabel?.text = iAmMax(max)
         cell.detailTextLabel?.text = max
         return cell
